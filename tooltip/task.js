@@ -7,29 +7,31 @@ let activeTooltip = null;
 hasTooltipElements.forEach((element) => {
     element.addEventListener("click", (event) => {
         event.preventDefault();
-        // getting the text for the tip from the title of clicked element
         const tooltipText = element.getAttribute("title");
-        // creating new div
         const tooltipElement = document.createElement("div");
-        // adding "tooltip" class to div element
         tooltipElement.classList.add("tooltip");
-        // inserting text to div element
         tooltipElement.textContent = tooltipText;
-        // addit style top and left to position the element
         tooltipElement.style.top =
             element.offsetTop + element.offsetHeight + "px";
         tooltipElement.style.left = element.offsetLeft + "px";
-        // checking if there's already a new div with ".tooltip_active" class
-        // if there's one, we remove "tooltip_active" to make only one tip to be shown at a time
-        if (activeTooltip) {
-            activeTooltip.classList.remove("tooltip_active");
+
+        // If the tooltip for the clicked element is already active
+        if (activeTooltip && activeTooltip === tooltipElement) {
+            tooltipElement.classList.remove("tooltip_active"); // hide the tooltip
+            activeTooltip = null; // reset the activeTooltip variable
+        } else {
+            // If the clicked element doesn't have an active tooltip
+
+            // If there is already an active tooltip
+            if (activeTooltip) {
+                activeTooltip.classList.remove("tooltip_active"); // hide the active tooltip
+            }
+            element.parentNode.insertBefore(
+                tooltipElement,
+                element.nextSibling
+            );
+            activeTooltip = tooltipElement; // set the activeTooltip variable to the new tooltip
+            tooltipElement.classList.add("tooltip_active"); // show the tooltip
         }
-        // inserting the created div
-        element.parentNode.insertBefore(tooltipElement, element.nextSibling);
-        // setting the varialble we designed at the top to be equal
-        // to the element we created and inserted
-        activeTooltip = tooltipElement;
-        // adding "tooltip_active" class as it 'activates' the tip
-        tooltipElement.classList.add("tooltip_active");
     });
 });
