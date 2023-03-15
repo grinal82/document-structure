@@ -6,6 +6,7 @@ tooltips.forEach((tooltip) => {
 
         const tooltipText = tooltip.getAttribute("title");
         const tooltipActive = document.querySelector(".tooltip_active");
+        const rect = tooltip.getBoundingClientRect();
 
         if (tooltipActive && tooltipActive.textContent === tooltipText) {
             tooltipActive.classList.remove("tooltip_active");
@@ -19,6 +20,8 @@ tooltips.forEach((tooltip) => {
         const tooltipDiv = document.createElement("div");
         tooltipDiv.classList.add("tooltip", "tooltip_active");
         tooltipDiv.textContent = tooltipText;
-        tooltip.parentNode.insertBefore(tooltipDiv, tooltip.nextSibling);
+        tooltipDiv.style.left = rect.left + "px";
+        tooltipDiv.style.top = rect.top + 20 + "px";
+        tooltip.append(tooltipDiv);
     });
 });
